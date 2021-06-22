@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
@@ -17,13 +18,14 @@ import com.mimdal.todo.adapter.CustomSpinner
 import com.mimdal.todo.data.model.SpinnerPriority
 import com.mimdal.todo.data.model.Todo
 import com.mimdal.todo.databinding.FragmentAddBinding
+import com.mimdal.todo.databinding.FragmentAddNewBinding
 import com.mimdal.todo.util.Util
 import com.mimdal.todo.viewModel.TodoViewModel
 
 
 class AddFragment : Fragment() {
 
-    private var addBinding: FragmentAddBinding? = null
+    private var addBinding: FragmentAddNewBinding? = null
     private val viewModel: TodoViewModel by viewModels()
 
     override fun onCreateView(
@@ -31,15 +33,24 @@ class AddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        addBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add, container, false)
+        addBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_new, container, false)
         return addBinding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+
+        //set toolbar
+        (requireActivity() as AppCompatActivity).setSupportActionBar(addBinding!!.addToolbar)
+
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            title = "Add"
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         requireActivity().findViewById<FloatingActionButton>(R.id.fab).visibility = View.GONE
-        setHasOptionsMenu(true)
+
         addBinding!!.addSpinner.adapter = CustomSpinner(requireActivity(), Util.createSpinnerList())
         addBinding!!.addSpinner.onItemSelectedListener = viewModel.spinnerItemSelectedListener
 
@@ -97,4 +108,5 @@ class AddFragment : Fragment() {
 
 
 }
+
 

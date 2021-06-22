@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-            <variable
-                name="args"
-                type="com.mimdal.todo.fragments.UpdateFragmentArgs" />
+
+        <variable
+            name="args"
+            type="com.mimdal.todo.fragments.UpdateFragmentArgs" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,6 +15,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/update_appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/update_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                app:elevation="0dp" />
+
+
+        </com.google.android.material.appbar.AppBarLayout>
 
 
         <EditText
@@ -24,13 +46,13 @@
             android:ems="10"
             android:gravity="top|left"
             android:hint="Title"
-            android:text="@{args.todo.title}"
             android:inputType="textMultiLine"
             android:overScrollMode="always"
             android:padding="8dp"
             android:scrollbarStyle="insideInset"
             android:scrollbars="vertical"
             android:singleLine="false"
+            android:text="@{args.todo.title}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -43,13 +65,13 @@
             android:ems="10"
             android:gravity="top|left"
             android:hint="Description"
-            android:text="@{args.todo.description}"
             android:inputType="textMultiLine"
             android:overScrollMode="always"
             android:padding="8dp"
             android:scrollbarStyle="insideInset"
             android:scrollbars="vertical"
             android:singleLine="false"
+            android:text="@{args.todo.description}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,18 +79,19 @@
 
         <Spinner
             android:id="@+id/update_spinner"
+            parsePriorityToSpinnerItemSelect="@{args.todo.priority}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/add_update_fragments_bg"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
+            android:background="@drawable/add_update_fragments_bg"
+            android:padding="2dp"
+            android:spinnerMode="dropdown"
             app:layout_constraintBottom_toTopOf="@+id/update_description_edtText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/update_title_edtText"
-            android:spinnerMode="dropdown"
-            android:padding="2dp"
-            parsePriorityToSpinnerItemSelect = "@{args.todo.priority}"/>
+            app:layout_constraintTop_toBottomOf="@+id/update_title_edtText" />
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"

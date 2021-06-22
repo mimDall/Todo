@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -21,13 +22,14 @@ import com.mimdal.todo.data.model.Priority
 import com.mimdal.todo.data.model.SpinnerPriority
 import com.mimdal.todo.data.model.Todo
 import com.mimdal.todo.databinding.FragmentUpdateBinding
+import com.mimdal.todo.databinding.FragmentUpdateNewBinding
 import com.mimdal.todo.util.Util
 import com.mimdal.todo.viewModel.TodoViewModel
 
 
 class UpdateFragment : Fragment() {
 
-    private var updateBinding: FragmentUpdateBinding? = null
+    private var updateBinding: FragmentUpdateNewBinding? = null
     private val viewModel: TodoViewModel by viewModels()
     private val args: UpdateFragmentArgs by navArgs()
 
@@ -38,7 +40,7 @@ class UpdateFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         updateBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_update, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_update_new, container, false)
         updateBinding!!.args = this.args
         return updateBinding!!.root
     }
@@ -46,12 +48,20 @@ class UpdateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().findViewById<FloatingActionButton>(R.id.fab).visibility = View.GONE
         setHasOptionsMenu(true)
+        //set toolbar
+        (requireActivity() as AppCompatActivity).setSupportActionBar(updateBinding!!.updateToolbar)
+
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            title = "Update"
+            setDisplayHomeAsUpEnabled(true)
+        }
+
+
+        requireActivity().findViewById<FloatingActionButton>(R.id.fab).visibility = View.GONE
         updateBinding!!.updateSpinner.adapter =
             CustomSpinner(requireActivity(), Util.createSpinnerList())
-
-//        updateBinding!!.updateSpinner.onItemSelectedListener = viewModel.spinnerItemSelectedListener
+        updateBinding!!.updateSpinner.onItemSelectedListener = viewModel.spinnerItemSelectedListener
 
     }
 
@@ -96,7 +106,8 @@ class UpdateFragment : Fragment() {
         val updatedId = args.todo.id
         val updatedTitle = updateBinding!!.updateTitleEdtText.text.toString()
         val updatedDescription = updateBinding!!.updateDescriptionEdtText.text.toString()
-        val updatedPriority = (updateBinding!!.updateSpinner.selectedItem as SpinnerPriority).spinnerPriority
+        val updatedPriority =
+            (updateBinding!!.updateSpinner.selectedItem as SpinnerPriority).spinnerPriority
 
         if (viewModel.verifyUserData(updatedTitle, updatedDescription)) {
 

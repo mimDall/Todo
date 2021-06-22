@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/update_toolbar"
@@ -29,8 +30,12 @@
                 android:layout_height="wrap_content"
                 android:background="#fff"
                 android:minHeight="?attr/actionBarSize"
-                app:titleTextColor="@android:color/white"
-                android:theme="@style/ToolbarTheme"/>
+                android:theme="@style/ToolbarTheme"
+                app:elevation="0dp"
+                app:contentInsetLeft="0dp"
+                app:titleMarginStart="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -90,11 +95,13 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/add_update_fragments_bg"
             android:padding="2dp"
+            android:overlapAnchor="false"
             android:spinnerMode="dropdown"
             app:layout_constraintBottom_toTopOf="@+id/update_description_edtText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/update_title_edtText" />
+            app:layout_constraintTop_toBottomOf="@+id/update_title_edtText"
+            />
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"

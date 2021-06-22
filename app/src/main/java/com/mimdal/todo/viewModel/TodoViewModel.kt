@@ -7,8 +7,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.databinding.Bindable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.navArgs
 import com.mimdal.todo.R
@@ -28,6 +30,8 @@ class TodoViewModel(application: Application) : AndroidViewModel(application) {
     private val toDoDao = TodoDatabase.getDatabaseInstance(application).todoDao()
     private val repository: TodoRepository = TodoRepository(toDoDao)
     val getAllData: LiveData<List<Todo>> = repository.getAllData
+    val searchQuery = MutableLiveData<String>(null)
+
 
     val spinnerItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(
@@ -82,7 +86,6 @@ class TodoViewModel(application: Application) : AndroidViewModel(application) {
 //            }
 
 
-
         }
 
         override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -115,7 +118,7 @@ class TodoViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun searchDatabase(searchQuery: String) : LiveData<List<Todo>>{
+    fun searchDatabase(searchQuery: String): LiveData<List<Todo>> {
         return repository.searchDatabase(searchQuery)
     }
 

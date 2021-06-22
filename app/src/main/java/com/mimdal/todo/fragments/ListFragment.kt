@@ -1,6 +1,7 @@
 package com.mimdal.todo.fragments
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -23,16 +24,14 @@ import com.mimdal.todo.adapter.TodoListAdapter
 import com.mimdal.todo.data.model.Todo
 import com.mimdal.todo.databinding.FragmentListBinding
 import com.mimdal.todo.databinding.FragmentListNewBinding
+import com.mimdal.todo.util.Util
 import com.mimdal.todo.viewModel.TodoViewModel
 
 class ListFragment : Fragment() {
 
-    private var listBinding: FragmentListBinding? = null
+    private var listBinding: FragmentListNewBinding? = null
     private val viewModel: TodoViewModel by viewModels()
     private val adapter: TodoListAdapter by lazy { TodoListAdapter() }
-    var searchView: SearchView? = null
-    val searchQuery = MutableLiveData<String>("")
-
 
 
     override fun onCreateView(
@@ -41,13 +40,21 @@ class ListFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        listBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
+        listBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_list_new, container, false)
+        listBinding!!.lifecycleOwner = this
         return listBinding!!.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        listBinding!!.viewModel = this.viewModel
+
+        //set toolbar
+        (requireActivity() as AppCompatActivity).setSupportActionBar(listBinding!!.mainToolbar)
+
 
         //make fab visible
         requireActivity().findViewById<FloatingActionButton>(R.id.fab).visibility = View.VISIBLE
@@ -57,17 +64,12 @@ class ListFragment : Fragment() {
 
         //setup recyclerview
         setupRecyclerView()
-        listBinding!!.lifecycleOwner = this
 
-        searchQuery.observe(viewLifecycleOwner, Observer {
-
-
-        })
 
         Transformations.switchMap(
-            searchQuery
+            viewModel.searchQuery
         ) {
-            Log.d("ListFragment", "searchQuery is $searchQuery")
+            Log.d("ListFragment", "searchQuery is ${viewModel.searchQuery.value}")
             if (!it.isNullOrEmpty()) {
                 Log.d("ListFragment", "searchInDatabase is called")
                 searchInDatabase(it)
@@ -77,58 +79,27 @@ class ListFragment : Fragment() {
             }
 
         }.observe(viewLifecycleOwner, Observer { it ->
-            Log.d("ListFragment", "observer is called")
 
             adapter.setData(it)
 
+            //check if empty views should be shown
+            if (it.isEmpty()) {
+                isDataListEmpty(true)
+            } else {
+                isDataListEmpty(false)
+            }
+
         })
 
+    }
 
-//        viewModel.getAllData.observe(
-//            viewLifecycleOwner,
-//            Observer {
-//                Log.d("ListFragment", "getAllData is called")
-//                adapter.setData(it)
-//                isDataListEmpty(it)
-////                Util.backUpList = it
-//            })
-
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
     }
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu, menu)
-
-        val search = menu.findItem(R.id.menu_search)
-        searchView = search.actionView as SearchView
-        searchView?.isSubmitButtonEnabled = true
-
-
-        searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                Log.d("ListFragment", "onQueryTextSubmit: $query")
-
-                if (query != null) {
-                    searchQuery.value = query!!
-                    searchInDatabase(query)
-
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                Log.d("ListFragment", "onQueryTextChange: $newText")
-                if (newText != null) {
-                    searchQuery.value = newText!!
-                    searchInDatabase(newText)
-
-                }
-
-                return true
-            }
-
-        })
     }
 
 
@@ -157,9 +128,10 @@ class ListFragment : Fragment() {
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (searchView?.isIconified != true) {
-                        searchView?.isIconified = true
-                        searchView?.onActionViewCollapsed()
+                    if (!viewModel.searchQuery.value.isNullOrEmpty()) {
+
+                        viewModel.searchQuery.value = ""
+
                     } else {
                         requireActivity().finish()
                     }
@@ -232,8 +204,8 @@ class ListFragment : Fragment() {
         }
     }
 
-    private fun isDataListEmpty(todoList: List<Todo>) {
-        if (todoList.isEmpty()) {
+    private fun isDataListEmpty(isEmpty: Boolean) {
+        if (isEmpty) {
             listBinding!!.mainImageEmptyBox.visibility = View.VISIBLE
             listBinding!!.mainTxtEmptyBox.visibility = View.VISIBLE
         } else {

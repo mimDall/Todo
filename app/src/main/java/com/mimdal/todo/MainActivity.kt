@@ -6,6 +6,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.mimdal.todo.databinding.ActivityMainBinding
 
@@ -16,10 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        setSupportActionBar(activityBinding!!.toolbar as Toolbar)
-
-
-        setupActionBarWithNavController(findNavController(R.id.nav_host_fragment))
+//        setSupportActionBar(activityBinding!!.toolbar as Toolbar)
 
 
 
