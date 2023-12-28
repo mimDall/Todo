@@ -1,6 +1,14 @@
-# ToDo Application :sunglasses
+# ToDo Application :sunglasses:
 
-SALAAAAm
+## Features:
+- Single activity
+- Search among items (implemented by Transformations switchMap)
+- DiffUtil
+- Data binding
+- Restore deleted item
+- Sorting items by priority
+- Deleting items by swipe
+- Reposiory pattern
 سش
 ## Third Party Libraries:
 - Material Design
