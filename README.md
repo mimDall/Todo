@@ -1,7 +1,7 @@
-#ToDo Application :sunglasses:
+# ToDo Application :sunglasses:
 ---
 
-##Features:
+## Features:
 - Single activity
 - Search among items (implemented by Transformations switchMap)
 - DiffUtil
@@ -11,7 +11,7 @@
 - Deleting items by swipe
 - Reposiory pattern
 
-##Third Party Libraries:
+## Third Party Libraries:
 - Material Design
 - Navigation Component
 - Room
@@ -19,5 +19,5 @@
 - LifeCycle Component (ViewModel and LiveData)
 - RecyclerView animation
   
-##Architecture Pattern:
+## Architecture Pattern:
 - MVVM
